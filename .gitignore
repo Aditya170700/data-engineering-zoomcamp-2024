@@ -1,0 +1,8 @@
+01_infrastructure/01_docker_and_postgres/yellow_tripdata_2021-01.csv
+01_infrastructure/01_docker_and_postgres/upload-data.ipynb
+01_infrastructure/01_docker_and_postgres/*.ipynb
+01_infrastructure/01_docker_and_postgres/.ipynb_checkpoints
+01_infrastructure/01_docker_and_postgres/.ipynb_checkpoints/
+01_infrastructure/01_docker_and_postgres/.ipynb_checkpoints/*
+.ipynb_checkpoints
+01_infrastructure/01_docker_and_postgres/ny_taxi_postgres_data
