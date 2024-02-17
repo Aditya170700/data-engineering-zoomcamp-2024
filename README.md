@@ -327,3 +327,33 @@ Data Engineering Zoomcamp adalah program belajar Data Engineering yang dipelopor
       --table=yellow_taxi_trips \
       --url=${URL}
   ```
+
+## 6. Menjalankan Postgres dan pgAdmin dengan Docker Compose
+
+- Docker Compose
+  Tools untuk membantu kita mendefinisikan dan menjalankan multi container Docker. Dengan Docker Compose kita bisa mendefinisikan semua container kita dalam satu file dan menyiapkan semua service yang kita butuhkan.
+- Setup Docker Compose
+  Buat file `docker-compose.yml`, isi dengan script berikut :
+  ```bash
+  services:
+  # konfigurasi postgres
+  pgdatabase:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=ny_taxi
+    volumes:
+      - "./ny_taxi_postgres_data:/var/lib/postgresql/data:rw"
+    ports:
+      - "2345:5432"
+  # konfigurasi pgAdmin
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "8080:80"
+  ```
+- jalankan docker compose `docker compose up`
