@@ -229,7 +229,7 @@ Data Engineering Zoomcamp adalah program belajar Data Engineering yang dipelopor
       -v ny_taxi_postgres_data:/var/lib/postgresql/data \
       -p 2345:5432 \
       --network=pg-network \
-      --name=pg-database \
+      --name=pgdatabase \
       postgres:13
     ```
 
@@ -241,7 +241,7 @@ Data Engineering Zoomcamp adalah program belajar Data Engineering yang dipelopor
       -e PGADMIN_DEFAULT_PASSWORD="root" \
       -p 8080:80 \
       --network=pg-network \
-      --name=pg-admin \
+      --name=pgadmin \
       dpage/pgadmin4
     ```
 
@@ -257,3 +257,73 @@ Data Engineering Zoomcamp adalah program belajar Data Engineering yang dipelopor
     - port : `5432`
     - username : `root`
     - password : `root`
+
+## 4. Dockerizing data ingestion
+
+- convert jupyter notebook ke python script
+  ```bash
+  jupyter nbconvert --to=script upload-data.ipynb
+  ```
+- bersihkan kodenya
+- rename jadi `ingest_data.py`
+- konfigurasi argumen pakai `argparse`
+- wrap kode ke fungsi `main()`
+- unpacking parameter dari argument yang sudah dibuat
+- implementasi parameter ke kode
+- membuat main block di python
+  - parse argument
+  - jalankan fungsi `main()`
+- jalankan scriptnya
+  ```bash
+  URL="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
+  python ingest_data.py \
+    --user=root \
+    --password=root \
+    --host=localhost \
+    --port=2345 \
+    --dbname=ny_taxi \
+    --table=yellow_taxi_trip \
+    --url=${URL}
+  ```
+
+## 5. Dockerizing ingestion script
+
+- buat dockerfile untuk membuat image yang berisi ingestion pipeline
+
+  ```bash
+  # image docker dasar
+  FROM python:3.9
+
+  # install library menggunakan pip
+  RUN apt-get install wget
+  RUN pip install pandas sqlalchemy psycopg2
+
+  # mengatur direktori kerja di container
+  WORKDIR /app
+
+  # menyalin skrip ke container, sumber -> tujuan
+  COPY ingest_data.py ingest_data.py
+
+  # definisikan apa yang akan dilakukan pertama kali ketika container dijalankan
+  ENTRYPOINT [ "python", "ingest_data.py" ]
+  ```
+
+- bikin docker image dari dockerfile
+
+  ```bash
+  docker build -t taxi_ingest:v1.0 .
+  ```
+
+- jalankan container menggunakan image yang telah dibuat
+  ```bash
+  docker run -it \
+    --network=pg-network \
+    taxi_ingest:v1.0 \
+      --user=root \
+      --password=root \
+      --host=pgdatabase \
+      --port=5432 \
+      --dbname=ny_taxi \
+      --table=yellow_taxi_trips \
+      --url=${URL}
+  ```

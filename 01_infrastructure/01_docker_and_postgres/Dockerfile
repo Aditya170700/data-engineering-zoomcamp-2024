@@ -1,14 +1,14 @@
-# image docker dasar
 FROM python:3.9
 
 # install library menggunakan pip
-RUN pip install pandas
+RUN apt-get install wget
+RUN pip install pandas sqlalchemy psycopg2
 
 # mengatur direktori kerja di container
 WORKDIR /app
 
 # menyalin skrip ke container, sumber -> tujuan
-COPY pipeline.py pipeline.py
+COPY ingest_data.py ingest_data.py
 
 # definisikan apa yang akan dilakukan pertama kali ketika container dijalankan
-ENTRYPOINT [ "python", "pipeline.py" ]
+ENTRYPOINT [ "python", "ingest_data.py" ]
