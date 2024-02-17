@@ -207,3 +207,53 @@ Data Engineering Zoomcamp adalah program belajar Data Engineering yang dipelopor
 
       print('inserted another chunk, took %.3f second' % (t_end - t_start))
     ```
+
+## 3. Menghubungkan pgAdmin dan Postgres
+
+- setup pgAdmin dengan docker
+  https://hub.docker.com/r/dpage/pgadmin4/
+
+  - buat docker network
+
+    ```bash
+    docker network create pg-network
+    ```
+
+  - jalankan container postgres dengan network `pg-network`
+
+    ```bash
+    docker run -it \
+      -e POSTGRES_USER="root" \
+      -e POSTGRES_PASSWORD="root" \
+      -e POSTGRES_DB="ny_taxi" \
+      -v ny_taxi_postgres_data:/var/lib/postgresql/data \
+      -p 2345:5432 \
+      --network=pg-network \
+      --name=pg-database \
+      postgres:13
+    ```
+
+  - jalankan container pgAdmin dengan network `pg-network`
+
+    ```bash
+    docker run -it \
+      -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
+      -e PGADMIN_DEFAULT_PASSWORD="root" \
+      -p 8080:80 \
+      --network=pg-network \
+      --name=pg-admin \
+      dpage/pgadmin4
+    ```
+
+    - `docker run -it` : untuk menjalankan kontainer docker. Opsi `-it` untuk mengaktifkan mode interaktif dengan TTY yang terhubung, memungkinkan kita berinteraksi dengan container melalui terminal.
+    - `-e PGADMIN_DEFAULT_EMAIL="admin@admin.com"` : ini menetapkan environment variabel `PGADMIN_DEFAULT_EMAIL` di dalam container. Ini akan menjadi email default untuk masuk ke pgAdmin.
+    - `-e PGADMIN_DEFAULT_PASSWORD="root"` : ini menetapkan environment variabel `PGADMIN_DEFAULT_PASSWORD` di dalam container. Ini akan menjadi password default yang digunakan untuk masuk ke pgAdmin.
+    - `-p 8080:80` : untuk mengatur port forwarding dari container ke host. `8080` itu port di host, `80` itu port containernya. Itu artinya, kita dapat mengakses pgAdmin yang ada di dalam container melalui port `8080`.
+    - `dpage/pgadmin4` : ini adalah nama repository dan imagenya.
+
+  - akses pgAdmin di browser `http://localhost:8080`
+  - tambahkan koneksi ke postgres
+    - host : `nama_container`
+    - port : `5432`
+    - username : `root`
+    - password : `root`
