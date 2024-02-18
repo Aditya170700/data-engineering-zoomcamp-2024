@@ -357,3 +357,24 @@ Data Engineering Zoomcamp adalah program belajar Data Engineering yang dipelopor
       - "8080:80"
   ```
 - jalankan docker compose `docker compose up`
+
+## 7. Terraform
+
+- Apa itu Terraform
+  [Terraform](https://terraform.io/) adalah alat open-source yang digunakan untuk mengelola infrastruktur sebagai kode (Infrastructure as Code atau IaC). Dengan Terraform, Anda dapat mendefinisikan dan menyusun infrastruktur teknologi, seperti mesin virtual, jaringan, dan sumber daya cloud, menggunakan sintaks berbasis konfigurasi.
+
+  Istilah "infrastruktur sebagai kode" berarti Anda dapat mendeskripsikan semua elemen infrastruktur yang dibutuhkan untuk aplikasi atau proyek Anda dalam berkas konfigurasi yang dapat dibaca oleh manusia. Setelah konfigurasi tersebut diatur, Terraform dapat mengeksekusi perubahan pada infrastruktur dengan otomatis, memastikan keberlanjutan dan konsistensi dalam pengelolaan infrastruktur.
+
+  Terraform mendukung berbagai penyedia cloud, seperti AWS, Google Cloud, Microsoft Azure, dan lainnya. Dengan menggunakan Terraform, tim pengembangan dan operasional dapat bekerja sama secara efisien untuk menyusun, menyelaraskan, dan memelihara infrastruktur dengan cara yang terstruktur dan dapat dipantau.
+
+  ![Konsep Terraform](https://spaceliftio.wpcomstaging.com/wp-content/uploads/2023/03/terraform-architecture-diagram.png)
+
+  - Terraform manifest : kode Terraform yang kita siapkan untuk mendefinisikan Terraform.
+  - Providers : Code API yang memungkinkan Terraform untuk dapat berkomunikasi dan memanage resources dari berbagai services.
+  - Cloud Services : Service di cloud yang akan di manage oleh Terraform.
+
+- Perintah Utama
+  - `terraform init` : Menyiapkan semua kebutuhan
+  - `terraform plan` : Apa saja yang mau dilakukan
+  - `terraform apply` : Implementasi
+  - `terraform destroy` : Hapus semua yang sudah dibuat
